@@ -1,15 +1,13 @@
 package com.moe.zap.ui
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
+import android.os.LocaleList
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -18,6 +16,7 @@ import com.moe.zap.R
 import com.moe.zap.core.Kind
 import com.moe.zap.data.Item
 import com.moe.zap.data.Repo
+import java.util.Locale
 
 /** A keyboard built for a remote, always on screen, with results updating at every key press. */
 class SearchPane(
@@ -34,8 +33,8 @@ class SearchPane(
     private var arabic = false
     private var query = StringBuilder()
     private var filter: Kind? = null
-    private var recognizer: SpeechRecognizer? = null
-    private val voiceKey: TextView = root.findViewById(R.id.keyVoice)
+    private val voiceField: EditText = root.findViewById(R.id.voiceField)
+    private val voiceKey: View = root.findViewById(R.id.keyVoice)
 
     private val adapter = ResultAdapter(onOpen) { item ->
         val on = Repo.toggleFavorite(item.kind, item.id)
@@ -68,7 +67,22 @@ class SearchPane(
             arabic = !arabic
             showKeys()
         }
-        voiceKey.setOnClickListener { startVoice() }
+        voiceKey.setOnClickListener { openVoiceField() }
+        voiceField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: Editable?) {
+                if (voiceField.hasFocus()) setQuery(s?.toString().orEmpty())
+            }
+        })
+        voiceField.setOnEditorActionListener { _, _, _ ->
+            finishVoiceField()
+            true
+        }
+        // Posted so the field isn't hidden in the middle of focus moving away from it.
+        voiceField.setOnFocusChangeListener { _, has ->
+            if (!has) voiceField.post { if (!voiceField.hasFocus()) hideVoiceField() }
+        }
         val filters = listOf(
             R.id.filterAll to null, R.id.filterLive to Kind.LIVE,
             R.id.filterMovies to Kind.MOVIE, R.id.filterSeries to Kind.SERIES,
@@ -103,6 +117,7 @@ class SearchPane(
 
     /** Lets number keys and a connected keyboard type directly. */
     fun onKey(e: KeyEvent): Boolean {
+        if (voiceField.hasFocus()) return false
         if (e.keyCode == KeyEvent.KEYCODE_DEL) {
             deleteOne()
             return true
@@ -115,89 +130,36 @@ class SearchPane(
         return false
     }
 
-    private fun startVoice() {
-        if (recognizer != null) {
-            stopVoice()
-            return
-        }
-        if (!SpeechRecognizer.isRecognitionAvailable(activity)) {
-            Toast.makeText(activity, "Voice search isn't available on this TV", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (activity.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            listen()
-        } else {
-            activity.requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), VOICE_REQUEST)
-        }
-    }
-
-    fun onPermissionResult(requestCode: Int, grants: IntArray) {
-        if (requestCode != VOICE_REQUEST) return
-        if (grants.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
-            listen()
-        } else {
-            Toast.makeText(activity, "Voice search needs the microphone", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    // Listens right here, rather than opening the system's voice screen, which never handed back what was said.
-    private fun listen() {
-        val speech = SpeechRecognizer.createSpeechRecognizer(activity)
-        recognizer = speech
-        speech.setRecognitionListener(object : RecognitionListener {
-            private fun show(results: Bundle?) {
-                results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    ?.firstOrNull()?.takeIf { it.isNotBlank() }?.let(::setQuery)
-            }
-
-            override fun onPartialResults(results: Bundle?) = show(results)
-
-            override fun onResults(results: Bundle?) {
-                show(results)
-                stopVoice()
-            }
-
-            override fun onError(error: Int) {
-                // Services report a late error after their results too; by then this listener is already finished.
-                if (recognizer !== speech) return
-                android.util.Log.w("ZapVoice", "recognizer error $error")
-                stopVoice()
-                val message = when (error) {
-                    SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Didn't catch that. Try again."
-                    SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Voice search needs the internet"
-                    else -> "Voice search didn't work (error $error)"
-                }
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onReadyForSpeech(params: Bundle?) = Unit
-            override fun onBeginningOfSpeech() = Unit
-            override fun onRmsChanged(rmsdB: Float) = Unit
-            override fun onBufferReceived(buffer: ByteArray?) = Unit
-            override fun onEndOfSpeech() = Unit
-            override fun onEvent(eventType: Int, params: Bundle?) = Unit
-        })
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            .putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-            .putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity.packageName)
+    // On this TV only the system keyboard's mic hears the remote: recording from the app opens the built-in microphone,
+    // which crashes the TV's audio service, and the system voice screen never hands its words back. So voice search is
+    // a real text field: the keyboard's mic types into it, and results follow each word.
+    private fun openVoiceField() {
+        setQuery("")
+        voiceField.setText("")
         // The keyboard's language is the best hint at what the viewer is about to say.
-        if (arabic) intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-EG")
-        voiceKey.text = "🎤  Listening… press to stop"
-        speech.startListening(intent)
+        voiceField.imeHintLocales = LocaleList(Locale(if (arabic) "ar" else "en"))
+        queryView.visibility = View.GONE
+        voiceField.visibility = View.VISIBLE
+        voiceField.requestFocus()
+        voiceField.post { keyboardService().showSoftInput(voiceField, 0) }
     }
 
-    fun stopVoice() {
-        val speech = recognizer ?: return
-        recognizer = null
-        speech.destroy()
-        voiceKey.text = "🎤  Voice search"
+    private fun finishVoiceField() {
+        if (adapter.itemCount == 0 || !results.requestFocus()) voiceKey.requestFocus()
     }
+
+    private fun hideVoiceField() {
+        keyboardService().hideSoftInputFromWindow(voiceField.windowToken, 0)
+        voiceField.visibility = View.GONE
+        queryView.visibility = View.VISIBLE
+    }
+
+    private fun keyboardService() = activity.getSystemService(InputMethodManager::class.java)
 
     /** Back from results or filters returns to the keyboard. False means the menu should take focus. */
     fun handleBack(): Boolean {
-        if (recognizer != null) {
-            stopVoice()
+        if (voiceField.hasFocus()) {
+            voiceKey.requestFocus()
             return true
         }
         if (keyboard.hasFocus() || root.findViewById<View>(R.id.keySpace).parent.let { (it as View).hasFocus() } ||
@@ -228,7 +190,6 @@ class SearchPane(
 
     private companion object {
         const val COLUMNS = 6
-        const val VOICE_REQUEST = 41
         const val LATIN = "abcdefghijklmnopqrstuvwxyz1234567890"
         // Spelling variants (أ إ آ ة ى ؤ ئ) need no keys of their own: search treats them as their base letter.
         const val ARABIC = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي"

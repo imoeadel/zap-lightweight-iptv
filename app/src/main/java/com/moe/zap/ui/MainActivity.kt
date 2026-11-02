@@ -227,15 +227,6 @@ class MainActivity : Activity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        searchPane.onPermissionResult(requestCode, grantResults)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (started) searchPane.stopVoice()
-    }
-
     private fun onLoggedOut() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
