@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- No window animations: every screen appears the moment it is ready. -->
+    <style name="Zap" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentTransitions">false</item>
+        <item name="android:defaultFocusHighlightEnabled">false</item>
+    </style>
+    <style name="Zap.Player">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="Focusable">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:defaultFocusHighlightEnabled">false</item>
+    </style>
+    <style name="Pill" parent="Focusable">
+        <item name="android:background">@drawable/bg_row</item>
+        <item name="android:textColor">@color/on_row</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:minHeight">38dp</item>
+    </style>
+</resources>

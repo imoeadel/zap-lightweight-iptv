@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/paneSettings" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="32dp" android:paddingStart="16dp" android:paddingEnd="48dp" android:visibility="gone">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Settings" android:textColor="@color/text" android:textSize="26sp" android:fontFamily="sans-serif-medium" />
+    <TextView android:id="@+id/settingsAccount" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_dim" android:textSize="15sp" android:lineSpacingExtra="6dp" android:layout_marginTop="20dp" />
+    <TextView android:id="@+id/settingsLibrary" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_dim" android:textSize="15sp" android:lineSpacingExtra="6dp" android:layout_marginTop="16dp" />
+    <TextView android:id="@+id/settingsRefresh" style="@style/Pill" android:layout_width="240dp" android:layout_height="40dp" android:background="@drawable/bg_key" android:text="Refresh library" android:layout_marginTop="24dp" />
+    <TextView android:id="@+id/settingsManage" style="@style/Pill" android:layout_width="240dp" android:layout_height="40dp" android:background="@drawable/bg_key" android:text="Manage categories" android:layout_marginTop="8dp" />
+    <TextView android:id="@+id/settingsPin" style="@style/Pill" android:layout_width="240dp" android:layout_height="40dp" android:background="@drawable/bg_key" android:text="Parental PIN" android:layout_marginTop="8dp" />
+    <TextView android:id="@+id/settingsLogout" style="@style/Pill" android:layout_width="240dp" android:layout_height="40dp" android:background="@drawable/bg_key" android:text="Sign out" android:layout_marginTop="8dp" />
+</LinearLayout>

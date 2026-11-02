@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/rail" android:layout_width="124dp" android:layout_height="match_parent" android:orientation="vertical"
+            android:paddingTop="24dp" android:paddingStart="16dp" android:paddingEnd="8dp">
+            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_bolt" android:layout_marginStart="6dp" android:layout_marginBottom="20dp" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/navSearch" style="@style/Pill" android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:paddingHorizontal="10dp" android:text="Search" />
+            <TextView android:id="@+id/navLive" style="@style/Pill" android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:paddingHorizontal="10dp" android:text="Live TV" android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/navMovies" style="@style/Pill" android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:paddingHorizontal="10dp" android:text="Movies" android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/navSeries" style="@style/Pill" android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:paddingHorizontal="10dp" android:text="Series" android:layout_marginTop="4dp" />
+            <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+            <TextView android:id="@+id/navSettings" style="@style/Pill" android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:paddingHorizontal="10dp" android:text="Settings" android:layout_marginBottom="20dp" />
+        </LinearLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+            <include layout="@layout/pane_browse" />
+            <include layout="@layout/pane_search" />
+            <include layout="@layout/pane_settings" />
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/syncOverlay" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center"
+        android:background="@color/bg" android:visibility="gone" android:clickable="true">
+        <ImageView android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/ic_bolt" android:importantForAccessibility="no" />
+        <TextView android:id="@+id/syncTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Getting your library ready" android:textColor="@color/text" android:textSize="24sp" android:fontFamily="sans-serif-medium" android:layout_marginTop="12dp" />
+        <TextView android:id="@+id/syncStep" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/text_dim" android:textSize="15sp" android:layout_marginTop="8dp" />
+        <TextView android:id="@+id/syncRetry" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="40dp" android:text="Try again" android:background="@drawable/bg_key" android:layout_marginTop="20dp" android:visibility="gone" />
+    </LinearLayout>
+</FrameLayout>

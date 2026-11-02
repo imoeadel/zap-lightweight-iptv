@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg" android:paddingHorizontal="48dp" android:paddingTop="28dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Manage categories" android:textColor="@color/text" android:textSize="26sp" android:fontFamily="sans-serif-medium" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Press OK to switch between Shown, Hidden and Locked. Hidden and locked categories also stay out of All, Favorites and search." android:textColor="@color/text_dim" android:textSize="14sp" android:layout_marginTop="6dp" android:layout_marginBottom="14dp" />
+    <androidx.leanback.widget.VerticalGridView android:id="@+id/manageList" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+</LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+    <ImageView android:id="@+id/backdrop" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:alpha="0.22" android:importantForAccessibility="no" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:padding="36dp">
+        <ImageView android:id="@+id/poster" android:layout_width="176dp" android:layout_height="260dp" android:scaleType="centerCrop" android:background="@drawable/bg_card" android:importantForAccessibility="no" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="28dp">
+            <TextView android:id="@+id/title" android:textAlignment="viewStart" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="28sp" android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end" />
+            <TextView android:id="@+id/meta" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/accent" android:textSize="14sp" android:layout_marginTop="6dp" android:singleLine="true" android:ellipsize="end" />
+            <TextView android:id="@+id/plot" android:textAlignment="viewStart" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="15sp" android:lineSpacingExtra="3dp" android:maxLines="4" android:ellipsize="end" android:layout_marginTop="10dp" />
+            <TextView android:id="@+id/cast" android:textAlignment="viewStart" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_dim" android:textSize="13sp" android:singleLine="true" android:ellipsize="end" android:layout_marginTop="8dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="16dp">
+                <TextView android:id="@+id/play" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="42dp" android:minWidth="140dp" android:background="@drawable/bg_key" android:text="Play" />
+                <TextView android:id="@+id/fav" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="42dp" android:minWidth="140dp" android:background="@drawable/bg_key" android:text="Add to favorites" android:layout_marginStart="8dp" />
+            </LinearLayout>
+            <androidx.leanback.widget.HorizontalGridView android:id="@+id/seasons" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="14dp" android:visibility="gone" />
+            <androidx.leanback.widget.VerticalGridView android:id="@+id/episodes" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="4dp" android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

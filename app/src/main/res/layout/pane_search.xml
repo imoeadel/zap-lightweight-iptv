@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/paneSearch" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:visibility="gone">
+    <LinearLayout android:layout_width="284dp" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="24dp" android:paddingEnd="16dp">
+        <TextView android:id="@+id/query" android:layout_width="match_parent" android:layout_height="44dp" android:background="@drawable/bg_card" android:gravity="center_vertical" android:paddingHorizontal="12dp"
+            android:textColor="@color/text" android:textSize="18sp" android:singleLine="true" android:ellipsize="start" android:hint="Search everything" android:textColorHint="#5C626B" />
+        <GridLayout android:id="@+id/keyboard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:columnCount="6" android:useDefaultMargins="false" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="40dp" android:orientation="horizontal" android:layout_marginTop="4dp">
+            <TextView android:id="@+id/keySpace" style="@style/Focusable" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_key" android:textColor="@color/on_row" android:gravity="center" android:textSize="13sp" android:text="Space" />
+            <TextView android:id="@+id/keyDelete" style="@style/Focusable" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/bg_key" android:textColor="@color/on_row" android:gravity="center" android:textSize="13sp" android:text="Delete" />
+            <TextView android:id="@+id/keyClear" style="@style/Focusable" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/bg_key" android:textColor="@color/on_row" android:gravity="center" android:textSize="13sp" android:text="Clear" />
+            <TextView android:id="@+id/keyLang" style="@style/Focusable" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/bg_key" android:textColor="@color/on_row" android:gravity="center" android:textSize="14sp" android:text="عربي" />
+        </LinearLayout>
+    <TextView android:id="@+id/keyVoice" style="@style/Pill" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="4dp" android:background="@drawable/bg_key" android:text="🎤  Voice search" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="24dp" android:layout_marginBottom="6dp">
+        <TextView android:id="@+id/filterAll" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="34dp" android:text="All" />
+        <TextView android:id="@+id/filterLive" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="34dp" android:text="Live" />
+        <TextView android:id="@+id/filterMovies" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="34dp" android:text="Movies" />
+        <TextView android:id="@+id/filterSeries" style="@style/Pill" android:layout_width="wrap_content" android:layout_height="34dp" android:text="Series" />
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <androidx.leanback.widget.VerticalGridView android:id="@+id/results" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingBottom="24dp" android:paddingEnd="24dp" android:clipToPadding="false" app:focusOutFront="true" />
+        <TextView android:id="@+id/searchHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:textColor="@color/text_dim" android:textSize="16sp" android:text="Results appear as you type" />
+    </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
