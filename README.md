@@ -1,7 +1,28 @@
 # Zap
 
 A fast IPTV player for Android TV, for subscriptions that sign in with a server URL, username and password
-(Xtream Codes). Built for one TV: a Tornado on Android 11 (MediaTek m7332, 32-bit, 1.7 GB RAM, 1080p interface).
+(Xtream Codes). Zap is only a player: it comes with no channels, so you need your own subscription.
+
+## Install on your TV
+
+You need an ARM-based Android TV on Android 8 or newer. Zap has only been tested on a Tornado TV (Android 11) and an
+Android 12 TV emulator, so other models may behave differently.
+
+1. On the TV, install **Downloader** from the Play Store.
+2. Open Downloader and enter this address:
+
+       https://github.com/imoeadel/zap-lightweight-iptv/releases/latest/download/zap.apk
+
+3. When asked, allow Downloader to install unknown apps, then choose **Install**.
+4. Open Zap and sign in with your subscription's server URL, username and password.
+
+No Downloader? Download `zap.apk` from the [latest release](https://github.com/imoeadel/zap-lightweight-iptv/releases/latest)
+on a computer, copy it to a USB stick, and open it with a file manager on the TV.
+
+**To update:** repeat the same steps. Your login and favorites stay. Zap doesn't update itself.
+
+**Voice search:** press Voice search, then use the mic on the TV's keyboard. This depends on the keyboard and remote
+that came with your TV, so it may not work on every model.
 
 ## Why it is fast
 
@@ -38,13 +59,17 @@ types and status codes, never URLs.
 | Movie, episode | Left / Right | Seek. Holding goes faster |
 | Movie, episode | Down | Options: audio, subtitles, sleep |
 
-## Build and install
+## Build from source
 
-    export JAVA_HOME=/opt/homebrew/opt/openjdk@17 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools
+Needs Java 17 and the Android SDK. Point `JAVA_HOME` and `ANDROID_HOME` at them, then:
+
     ./gradlew :app:testReleaseUnitTest :app:assembleRelease
-    dev/install-tv.sh
+    adb connect <tv-ip>:5555
+    adb install -r app/build/outputs/apk/release/app-release.apk
 
-Create `local.properties` first if it is missing: `sdk.dir=/opt/homebrew/share/android-commandlinetools`.
+Builds use the debug key unless a `keystore.properties` file is present. A self-built copy won't update over the
+published APK, because the signatures differ: uninstall it first, which also clears the login and favorites.
+`dev/install-tv.sh` is the maintainer's own install script and relies on tools outside this repo.
 
 ## Testing without a subscription or the TV
 

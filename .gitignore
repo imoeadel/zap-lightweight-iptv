@@ -4,3 +4,6 @@ app/build/
 local.properties
 dev/media/
 *.apk
+keystore.properties
+*.jks
+*.keystore
